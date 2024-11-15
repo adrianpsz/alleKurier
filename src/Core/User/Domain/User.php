@@ -25,14 +25,25 @@ class User
      */
     private string $email;
 
-    public function __construct(string $email)
+    /**
+     * @ORM\Column(type="boolean", nullable=false)
+     */
+    private string $active;
+
+    public function __construct(string $email, bool $active)
     {
         $this->id = null;
         $this->email = $email;
+        $this->active = $active;
     }
 
     public function getEmail(): string
     {
         return $this->email;
+    }
+
+    public function isActive(): bool
+    {
+        return $this->active;
     }
 }
