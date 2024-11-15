@@ -78,4 +78,25 @@ class CreateInvoiceHandlerTest extends TestCase
 
         $this->handler->__invoke((new CreateInvoiceCommand('test@test.pl', -5)));
     }
+
+    public function test_handle_failure(): void
+    {
+        $user = $this->createMock(User::class);
+
+        $user->method('isActive')
+            ->willReturn(false);
+
+        $invoice = new Invoice(
+            $user, 12500
+        );
+
+        $this->invoiceRepository->expects(self::never())
+            ->method('save')
+            ->with($invoice);
+
+        $this->invoiceRepository->expects(self::never())
+            ->method('flush');
+
+        $this->handler->__invoke((new CreateInvoiceCommand('test@test.pl', 12500)));
+    }
 }
